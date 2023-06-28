@@ -201,6 +201,20 @@ abstract class PdoAdapter extends AbstractAdapter
         $keys = array_keys($current);
         $sql .= "(" . implode(', ', array_map([$this, 'quoteColumnName'], $keys)) . ") VALUES";
 
+        if ($this->isDryRunEnabled()) {
+            foreach ($rows as $r => $row) {
+                foreach ($row as $key => $value) {
+                    $row[$key] = $this->getConnection()->quote($value);
+                }
+
+                $rows[$r] = '(' . join(', ', $row) . ')';
+            }
+
+            $sql .= "\n" . join(",\n", $rows);
+            $this->getOutput()->writeln($sql);
+            return 0;
+        }
+
         $vals = [];
         foreach ($rows as $row) {
             foreach ($row as $v) {
