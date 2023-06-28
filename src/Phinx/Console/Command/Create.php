@@ -151,6 +151,7 @@ class Create extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->bootstrap($input, $output);
+		die('in execute');
 
         // get the migration path from the config
         $path = $this->getMigrationPath($input, $output);
