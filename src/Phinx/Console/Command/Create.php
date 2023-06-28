@@ -177,8 +177,6 @@ class Create extends AbstractCommand
             throw new \InvalidArgumentException('Invalid LB branch name or Jira ref');
         }
 
-        die("Using name: {$className}\n");
-
         if (!Util::isValidPhinxClassName($className)) {
             throw new \InvalidArgumentException(sprintf(
                 'The migration class name "%s" is invalid. Please use CamelCase format.',
