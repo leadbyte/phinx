@@ -221,4 +221,32 @@ class Util
     {
         return glob($path, defined('GLOB_BRACE') ? GLOB_BRACE : 0);
     }
+
+    public static function fromLbBranchName($branch)
+    {
+        $parts = explode('-', $branch);
+
+        if (count($parts) < 2 || !is_numeric($parts[1]))
+        {
+            return false;
+        }
+
+        $ref = $parts[0] . '-' . $parts[1];
+        return ucfirst(self::camelCase($ref));
+    }
+
+    public static function camelCase($str, array $noStrip = [])
+    {
+        // Non-alpha and non-numeric characters become spaces
+        $str = strtolower($str);
+        $str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
+        $str = trim($str);
+
+        // Uppercase the first character of each word
+        $str = ucwords($str);
+        $str = str_replace(" ", "", $str);
+        $str = lcfirst($str);
+
+        return $str;
+    }
 }

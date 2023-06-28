@@ -172,6 +172,13 @@ class Create extends AbstractCommand
         $path = realpath($path);
         $className = $input->getArgument('name');
 
+        if (($className = Util::fromLbBranchName($className)) === false)
+        {
+            throw new \InvalidArgumentException('Invalid LB branch name or Jira ref');
+        }
+
+        die("Using name: {$className}\n");
+
         if (!Util::isValidPhinxClassName($className)) {
             throw new \InvalidArgumentException(sprintf(
                 'The migration class name "%s" is invalid. Please use CamelCase format.',
