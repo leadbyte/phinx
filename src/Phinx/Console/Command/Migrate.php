@@ -49,7 +49,7 @@ class Migrate extends AbstractCommand
             ->addOption('--date', '-d', InputOption::VALUE_REQUIRED, 'The date to migrate to')
             ->addOption('--dry-run', '-x', InputOption::VALUE_NONE, 'Dump query to standard output instead of executing it')
             ->addOption('--dry-run-live', '-l', InputOption::VALUE_NONE, 'Dump query for live deployment')
-            ->addOption('--host', '-o', InputOption::VALUE_NONE, 'LeadByte host name')
+            ->addOption('--host', '-o', InputOption::VALUE_REQUIRED, 'LeadByte host name')
             ->setHelp(
                 <<<EOT
 The <info>migrate</info> command runs all available migrations, optionally up to a specific version
