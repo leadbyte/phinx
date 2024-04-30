@@ -125,11 +125,14 @@ abstract class PdoAdapter extends AbstractAdapter
      */
     public function execute($sql)
     {
-        if ($this->isDryRunEnabled()) {
+        /*if ($this->isDryRunEnabled()) {
             $this->getOutput()->writeln($sql);
 
             return 0;
-        }
+        }*/
+
+        // Always output the query!
+        $this->getOutput()->writeln($sql);
 
         return $this->getConnection()->exec($sql);
     }
