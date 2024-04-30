@@ -205,19 +205,17 @@ abstract class PdoAdapter extends AbstractAdapter
         $keys = array_keys($current);
         $sql .= "(" . implode(', ', array_map([$this, 'quoteColumnName'], $keys)) . ") VALUES";
 
-        if ($this->isDryRunEnabled()) {
-            foreach ($rows as $r => $row) {
-                foreach ($row as $key => $value) {
-                    $row[$key] = $this->getConnection()->quote($value);
-                }
-
-                $rows[$r] = '(' . join(', ', $row) . ')';
+        // Always output query!
+        foreach ($rows as $r => $row) {
+            foreach ($row as $key => $value) {
+                $row[$key] = $this->getConnection()->quote($value);
             }
 
-            $sql .= "\n" . join(",\n", $rows);
-            $this->getOutput()->writeln($sql);
-            return 0;
+            $rows[$r] = '(' . join(', ', $row) . ')';
         }
+
+        $sql .= "\n" . join(",\n", $rows);
+        $this->getOutput()->writeln($sql);
 
         $vals = [];
         foreach ($rows as $row) {
@@ -232,7 +230,6 @@ abstract class PdoAdapter extends AbstractAdapter
         $count_vars = count($rows);
         $queries = array_fill(0, $count_vars, $query);
         $sql .= implode(',', $queries);
-        $this->getOutput()->writeln($sql);
 
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($vals);
