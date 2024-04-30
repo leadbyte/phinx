@@ -206,15 +206,17 @@ abstract class PdoAdapter extends AbstractAdapter
         $sql .= "(" . implode(', ', array_map([$this, 'quoteColumnName'], $keys)) . ") VALUES";
 
         // Always output query!
-        foreach ($rows as $r => $row) {
+        $rowsCopy = $rows;
+
+        foreach ($rowsCopy as $r => $row) {
             foreach ($row as $key => $value) {
                 $row[$key] = $this->getConnection()->quote($value);
             }
 
-            $rows[$r] = '(' . join(', ', $row) . ')';
+            $rowsCopy[$r] = '(' . join(', ', $row) . ')';
         }
 
-        $sql .= "\n" . join(",\n", $rows);
+        $sql .= "\n" . join(",\n", $rowsCopy);
         $this->getOutput()->writeln($sql);
 
         $vals = [];
