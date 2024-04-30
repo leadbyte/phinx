@@ -216,8 +216,8 @@ abstract class PdoAdapter extends AbstractAdapter
             $rowsCopy[$r] = '(' . join(', ', $row) . ')';
         }
 
-        $sql .= "\n" . join(",\n", $rowsCopy);
-        $this->getOutput()->writeln($sql);
+        $sqlOut = $sql . "\n" . join(",\n", $rowsCopy);
+        $this->getOutput()->writeln($sqlOut);
 
         $vals = [];
         foreach ($rows as $row) {
