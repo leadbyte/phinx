@@ -219,6 +219,10 @@ abstract class PdoAdapter extends AbstractAdapter
         $sqlOut = $sql . "\n" . join(",\n", $rowsCopy);
         $this->getOutput()->writeln($sqlOut);
 
+        if ($this->isDryRunEnabled()) {
+            return 0;
+        }
+
         $vals = [];
         foreach ($rows as $row) {
             foreach ($row as $v) {
