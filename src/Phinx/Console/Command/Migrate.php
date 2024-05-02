@@ -50,7 +50,7 @@ class Migrate extends AbstractCommand
             ->addOption('--dry-run', '-x', InputOption::VALUE_NONE, 'Dump query to standard output instead of executing it')
             ->addOption('--dry-run-live', '-l', InputOption::VALUE_NONE, 'Dump query for live deployment')
             ->addOption('--host', '-o', InputOption::VALUE_REQUIRED, 'LeadByte host name')
-            ->addOption('--extract-schema', '-e', InputOption::VALUE_NONE, 'Extract schema changes into phinxlog_changes table')
+            ->addOption('--extract-schema', '-s', InputOption::VALUE_NONE, 'Extract schema changes into phinxlog_changes table')
             ->setHelp(
                 <<<EOT
 The <info>migrate</info> command runs all available migrations, optionally up to a specific version
