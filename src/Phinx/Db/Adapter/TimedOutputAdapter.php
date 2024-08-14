@@ -321,4 +321,9 @@ class TimedOutputAdapter extends AdapterWrapper
         parent::dropSchema($name);
         $end();
     }
+
+    public function processTable(Table $table) {
+        $this->getAdapter()->processTable($table);
+    }
+
 }

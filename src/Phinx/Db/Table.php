@@ -44,6 +44,9 @@ class Table
      */
     protected $name;
 
+    protected $dbName;
+    protected $tableName;
+
     /**
      * @var array
      */
@@ -86,7 +89,8 @@ class Table
         $this->setName($name);
         $this->setOptions($options);
 
-        if ($adapter !== null) {
+        if ($adapter !== null)
+        {
             $this->setAdapter($adapter);
         }
     }
@@ -100,6 +104,9 @@ class Table
     public function setName($name)
     {
         $this->name = $name;
+
+        // Extract DB & Table names
+        $this->splitDbAndTable();
 
         return $this;
     }
@@ -638,22 +645,13 @@ class Table
      */
     public function update()
     {
-        if (!$this->exists()) {
+        if (!$this->exists())
+        {
             throw new \RuntimeException('Cannot update a table that doesn\'t exist!');
         }
 
-        // update table
-        foreach ($this->getPendingColumns() as $column) {
-            $this->getAdapter()->addColumn($this, $column);
-        }
-
-        foreach ($this->getIndexes() as $index) {
-            $this->getAdapter()->addIndex($this, $index);
-        }
-
-        foreach ($this->getForeignKeys() as $foreignKey) {
-            $this->getAdapter()->addForeignKey($this, $foreignKey);
-        }
+        // Process pending columns!
+        $this->getAdapter()->processTable($this);
 
         $this->saveData();
         $this->reset(); // reset pending changes
@@ -710,12 +708,49 @@ class Table
      */
     public function save()
     {
-        if ($this->exists()) {
+        if ($this->exists())
+        {
             $this->update(); // update the table
-        } else {
+        }
+        else
+        {
             $this->create(); // create the table
         }
 
         $this->reset(); // reset pending changes
     }
+
+    private function splitDbAndTable()
+    {
+        $nameArr = str_replace('`', '', $this->name);
+        $parts   = explode('.', $nameArr);
+
+        if (count($parts) == 2)
+        {
+            $this->dbName = $parts[0];
+            $this->tableName = $parts[1];
+        }
+        else
+        {
+            $this->dbName = '';
+            $this->tableName = $parts[0];
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+
 }
