@@ -559,4 +559,10 @@ interface AdapterInterface
      * @return mixed
      */
     public function castToBool($value);
+
+    /**
+     * @param Table $table
+     */
+    public function processTable(Table $table);
+
 }
